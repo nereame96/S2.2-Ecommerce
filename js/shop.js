@@ -75,10 +75,34 @@ const cart = [];
 const total = 0;
 
 // Exercise 1
-const buy = (id) => {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cart array
+// 1. Loop for to the array products to get the item to add to cart
+
+const buy = (id, array = products, property = 'id') => {
+    let position = -1
+
+    if(array.length < 1) return position
+    
+    for (let i = 0; i < array.length; i++) {
+        if(array[i][property] == id){
+            position = i;
+            break;
+        }
+        
+    }
+
+    return position;
+
 }
+
+console.log(buy(4))
+
+
+// 2. Add found product to the cart array
+
+//HACER UN PUSH A CART (HABRÁ QUE HACER UN BUCLE PARA QUE SI ESTA AAFEGIT YA SE SUME Y NO SE AFEGEIXI) Y SUMAR DINERO A TOTAL
+
+
+
 
 // Exercise 2
 const cleanCart = () =>  {
