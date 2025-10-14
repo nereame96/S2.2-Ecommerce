@@ -98,7 +98,7 @@ const findPosition = (id, array = products, property = 'id') => {
 
 }
 
-console.log(findPosition(4))
+
 
 
 // 2. Add found product to the cart array
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// FALTA SUMAR DINERO A TOTAL !!!
+// FALTA SUMAR DINERO A TOTAL de  cada producto!!!
 //FALTA CONTADOR ICONO CESTA, QUE VAYA INDICANDO EL NUM DE ARTICULOS DENTRO
 
 
@@ -156,16 +156,30 @@ document.addEventListener('DOMContentLoaded', () => {
 // id="clean-cart"
 
 
+const cleanCartUI = () => {
+    
+    const finalTotal = 0
+
+    const totalPriceElement = document.getElementById('total_price')
+
+    if(totalPriceElement)  totalPriceElement.textContent = finalTotal.toFixed(2)
+    
+}
+
+
 const cleanCart = () =>  {
 
     cart.length = 0
+
+    cleanCartUI()
+
     console.log(cart)
 
 }
 
 const buttonCleanCart = document.getElementById('clean-cart')
 
-buttonCleanCart.addEventListener('click', cleanCart)
+if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart)
 
 
 
@@ -178,13 +192,11 @@ buttonCleanCart.addEventListener('click', cleanCart)
 
 //  class="btn btn-outline-dark cart-button"
 
-let totalPrice = document.getElementById('total_price')
 
-totalPrice = total
 
 const calculateTotal = () =>  {
     // Calculate total price of the cart using the "cartList" array
-total = 0
+    let total = 0
     //Bucle for
 
     for (let i = 0; i < cart.length; i++) {
@@ -193,7 +205,20 @@ total = 0
         
     }
     return total
+    
 }
+
+
+const updateCartUI = () => {
+    const finalTotal = calculateTotal()
+
+    const totalPriceElement = document.getElementById('total_price')
+
+    if(totalPriceElement)  totalPriceElement.textContent = finalTotal.toFixed(2)
+    
+}
+
+
 
 document.addEventListener('DOMContentLoaded', () =>{
 
@@ -208,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () =>{
 
 
 
-buttonShowCart.addEventListener('click', calculateTotal)
+
 
 // Exercise 4
 const applyPromotionsCart = () =>  {
