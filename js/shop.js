@@ -77,7 +77,11 @@ const total = 0;
 // Exercise 1
 // 1. Loop for to the array products to get the item to add to cart
 
-const buy = (id, array = products, property = 'id') => {
+
+
+
+
+const findPosition = (id, array = products, property = 'id') => {
     let position = -1
 
     if(array.length < 1) return position
@@ -94,25 +98,117 @@ const buy = (id, array = products, property = 'id') => {
 
 }
 
-console.log(buy(4))
+console.log(findPosition(4))
 
 
 // 2. Add found product to the cart array
 
-//HACER UN PUSH A CART (HABRÁ QUE HACER UN BUCLE PARA QUE SI ESTA AAFEGIT YA SE SUME Y NO SE AFEGEIXI) Y SUMAR DINERO A TOTAL
+const buy = (id) => {
+
+    let productPosition = findPosition(id)
+
+    if (productPosition === -1) return console.log(`Error: Product with ID ${id} not found `)
+
+    let selectedProduct = products[productPosition]
+
+
+    const cartPosition = findPosition(id, cart, 'id')
+
+    if (cartPosition === -1) {
+        const newItem = {...selectedProduct, quantity: 1}
+        cart.push(newItem)
+        console.log(cart)
+    } else {
+        cart[cartPosition].quantity++
+        console.log(cart)
+    }
+
+    
+}
+
+
+function addItemToCart(event) {
+
+    const button = event.currentTarget
+    const id = parseInt(button.getAttribute('data-product-id'))
+    buy(id)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const addButtons = document.querySelectorAll('.add-to-cart')
+
+    addButtons.forEach(button => {
+        button.addEventListener('click', addItemToCart )
+    })
+})
+
+
+
+// FALTA SUMAR DINERO A TOTAL !!!
+//FALTA CONTADOR ICONO CESTA, QUE VAYA INDICANDO EL NUM DE ARTICULOS DENTRO
+
 
 
 
 
 // Exercise 2
+
+// id="clean-cart"
+
+
 const cleanCart = () =>  {
 
+    cart.length = 0
+    console.log(cart)
+
 }
 
+const buttonCleanCart = document.getElementById('clean-cart')
+
+buttonCleanCart.addEventListener('click', cleanCart)
+
+
+
+
+
+
 // Exercise 3
+
+// id = 'total_price'
+
+//  class="btn btn-outline-dark cart-button"
+
+let totalPrice = document.getElementById('total_price')
+
+totalPrice = total
+
 const calculateTotal = () =>  {
     // Calculate total price of the cart using the "cartList" array
+total = 0
+    //Bucle for
+
+    for (let i = 0; i < cart.length; i++) {
+       
+            total += cart[i].price * cart[i].quantity 
+        
+    }
+    return total
 }
+
+document.addEventListener('DOMContentLoaded', () =>{
+
+    const buttonShowCart = document.querySelector('.cart-button')
+
+    if(buttonShowCart) {
+        buttonShowCart.addEventListener('click', updateCartUI)
+    }
+
+}
+)
+
+
+
+buttonShowCart.addEventListener('click', calculateTotal)
 
 // Exercise 4
 const applyPromotionsCart = () =>  {
