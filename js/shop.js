@@ -74,6 +74,8 @@ const cart = [];
 
 const total = 0;
 
+
+
 // Exercise 1
 // 1. Loop for to the array products to get the item to add to cart
 
@@ -117,13 +119,13 @@ const buy = (id) => {
     if (cartPosition === -1) {
         const newItem = {...selectedProduct, quantity: 1}
         cart.push(newItem)
-        console.log(cart)
+        
     } else {
         cart[cartPosition].quantity++
-        console.log(cart)
+        
     }
 
-    
+    console.log(cart)
 }
 
 
@@ -201,7 +203,7 @@ const calculateTotal = () =>  {
 
     for (let i = 0; i < cart.length; i++) {
        
-            total += cart[i].price * cart[i].quantity 
+            total += parseFloat(cart[i].subtotalWithDiscount)
         
     }
     return total
@@ -214,7 +216,7 @@ const updateCartUI = () => {
 
     const totalPriceElement = document.getElementById('total_price')
 
-    if(totalPriceElement)  totalPriceElement.textContent = finalTotal.toFixed(2)
+    if(totalPriceElement)  totalPriceElement.textContent = finalTotal
     
 }
 
@@ -238,12 +240,109 @@ document.addEventListener('DOMContentLoaded', () =>{
 // Exercise 4
 const applyPromotionsCart = () =>  {
     // Apply promotions to each item in the array "cart"
+    
+    cart.forEach(item => {
+    
+    let subtotal = item.price * item.quantity
+
+    if( item.offer && item.quantity >= item.offer.number) {
+
+       let discount =  (item.offer.percent / 100) 
+       subtotal = (subtotal * (1 - discount)).toFixed(2)
+    }
+
+    item.subtotalWithDiscount = subtotal
+    console.log(cart)
+})
+
+    return calculateTotal()
 }
 
-// Exercise 5
-const printCart = () => {
-    // Fill the shopping cart modal manipulating the shopping cart dom
+
+document.addEventListener('DOMContentLoaded', () =>{
+
+    const buttonShowCart = document.querySelector('.cart-button')
+
+    if(buttonShowCart) {
+        buttonShowCart.addEventListener('click', applyPromotionsCart)
+    }
+
 }
+)
+
+
+
+
+
+// Exercise 5
+
+
+const updateCartList = () => {
+
+    const cartListContainer = document.getElementById('cart_list')
+
+    if (!cartListContainer) {
+        console.log('Not found')  // pasarlo a return print luego
+        return 
+    }
+        
+
+    cartListContainer.innerHTML = '';
+
+    if (cart.length === 0) {
+        
+        cartListContainer.innerHTML = '<tr><td colspan="4" class="text-center">No product added</td></tr>';
+        return;
+
+        
+    }
+    cart.forEach(product => {
+        
+        cartListContainer.innerHTML += printCart(product)
+
+    })
+
+    updateCartUI() // Actualiza el precio final
+    
+} 
+
+
+const printCart = (product) => {
+    // Fill the shopping cart modal manipulating the shopping cart dom
+
+    let subtotalDisplay = product.subtotalWithDiscount
+
+    const row = 
+        ` 
+        <tr>
+			<th scope="row">${product.name}</th>
+			<td>${product.price}</td>
+			<td>${product.quantity}</td>
+			<td>${subtotalDisplay}</td>
+			<td>
+                <button class="btn btn-outline-danger btn-sm remove-item" data-product-id="${product.id}" aria-label="Remove ${product.name} from cart">
+                <i class="bi bi-trash fs-6"></i> 
+                
+            </button> 
+            </td>
+
+		</tr>
+        `
+    return row    
+
+
+}
+
+document.addEventListener('DOMContentLoaded', () =>{
+
+    const buttonShowCart = document.querySelector('.cart-button')
+
+    if(buttonShowCart) {
+        buttonShowCart.addEventListener('click', updateCartList)
+    }
+
+}
+)
 
 
 // ** Nivell II **
@@ -251,6 +350,10 @@ const printCart = () => {
 // Exercise 7
 const removeFromCart = (id) => {
 
+    const emptyRow = ''
+    return emptyRow
+
+    
 }
 
 const open_modal = () =>  {
