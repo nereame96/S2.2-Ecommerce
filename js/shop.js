@@ -1,3 +1,6 @@
+
+"use strict"
+
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
 const products = [
     {
@@ -72,6 +75,7 @@ const products = [
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart = [];
 
+
 const total = 0;
 
 
@@ -100,6 +104,17 @@ const findPosition = (id, array = products, property = 'id') => {
 
 }
 
+const updateProductCount = () => {
+
+    let productCount = document.getElementById('count_product')
+
+
+    const totalItems = cart.reduce((acc, product) => acc + product.quantity, 0 )
+
+    if (productCount) productCount.textContent = totalItems
+}
+
+
 
 
 
@@ -126,6 +141,7 @@ const buy = (id) => {
     }
 
     console.log(cart)
+    updateProductCount()
 }
 
 
@@ -136,17 +152,17 @@ function addItemToCart(event) {
     buy(id)
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const addButtons = document.querySelectorAll('.add-to-cart')
+// document.addEventListener('DOMContentLoaded', () => {
+//     const addButtons = document.querySelectorAll('.add-to-cart')
 
-    addButtons.forEach(button => {
-        button.addEventListener('click', addItemToCart )
-    })
-})
+//     addButtons.forEach(button => {
+//         button.addEventListener('click', addItemToCart )
+//     })
+// })
 
 
 
-// FALTA SUMAR DINERO A TOTAL de  cada producto!!!
+
 //FALTA CONTADOR ICONO CESTA, QUE VAYA INDICANDO EL NUM DE ARTICULOS DENTRO
 
 
@@ -174,14 +190,15 @@ const cleanCart = () =>  {
     cart.length = 0
 
     cleanCartUI()
+    updateCartList(); 
 
     console.log(cart)
 
 }
 
-const buttonCleanCart = document.getElementById('clean-cart')
+// const buttonCleanCart = document.getElementById('clean-cart')
 
-if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart)
+// if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart)
 
 
 
@@ -198,15 +215,9 @@ if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart)
 
 const calculateTotal = () =>  {
     // Calculate total price of the cart using the "cartList" array
-    let total = 0
-    //Bucle for
+   
 
-    for (let i = 0; i < cart.length; i++) {
-       
-            total += parseFloat(cart[i].subtotalWithDiscount)
-        
-    }
-    return total
+    return cart.reduce((total, item) => total + Number(item.subtotalWithDiscount || 0), 0)
     
 }
 
@@ -222,16 +233,16 @@ const updateCartUI = () => {
 
 
 
-document.addEventListener('DOMContentLoaded', () =>{
+// document.addEventListener('DOMContentLoaded', () =>{
 
-    const buttonShowCart = document.querySelector('.cart-button')
+//     const buttonShowCart = document.querySelector('.cart-button')
 
-    if(buttonShowCart) {
-        buttonShowCart.addEventListener('click', updateCartUI)
-    }
+//     if(buttonShowCart) {
+//         buttonShowCart.addEventListener('click', updateCartUI)
+//     }
 
-}
-)
+// }
+// )
 
 
 
@@ -259,16 +270,16 @@ const applyPromotionsCart = () =>  {
 }
 
 
-document.addEventListener('DOMContentLoaded', () =>{
+// document.addEventListener('DOMContentLoaded', () =>{
 
-    const buttonShowCart = document.querySelector('.cart-button')
+//     const buttonShowCart = document.querySelector('.cart-button')
 
-    if(buttonShowCart) {
-        buttonShowCart.addEventListener('click', applyPromotionsCart)
-    }
+//     if(buttonShowCart) {
+//         buttonShowCart.addEventListener('click', applyPromotionsCart)
+//     }
 
-}
-)
+// }
+// )
 
 
 
@@ -292,22 +303,27 @@ const updateCartList = () => {
     if (cart.length === 0) {
         
         cartListContainer.innerHTML = '<tr><td colspan="4" class="text-center">No product added</td></tr>';
+
+        updateCartUI()
+        updateProductCount()
+
         return;
 
         
     }
     cart.forEach(product => {
         
-        cartListContainer.innerHTML += printCart(product)
+        cartListContainer.innerHTML += printCartRow(product)
 
     })
 
     updateCartUI() // Actualiza el precio final
+    updateProductCount()
     
 } 
 
 
-const printCart = (product) => {
+const printCartRow = (product) => {
     // Fill the shopping cart modal manipulating the shopping cart dom
 
     let subtotalDisplay = product.subtotalWithDiscount
@@ -320,8 +336,8 @@ const printCart = (product) => {
 			<td>${product.quantity}</td>
 			<td>${subtotalDisplay}</td>
 			<td>
-                <button class="btn btn-outline-danger btn-sm remove-item" data-product-id="${product.id}" aria-label="Remove ${product.name} from cart">
-                <i class="bi bi-trash fs-6"></i> 
+                <button class="btn  btn-md my-0 py-0 remove-item" data-product-id="${product.id}" aria-label="Remove ${product.name} from cart">
+                <i class="bi bi-file-minus fs-4 red"></i> 
                 
             </button> 
             </td>
@@ -333,16 +349,16 @@ const printCart = (product) => {
 
 }
 
-document.addEventListener('DOMContentLoaded', () =>{
+// document.addEventListener('DOMContentLoaded', () =>{
 
-    const buttonShowCart = document.querySelector('.cart-button')
+//     const buttonShowCart = document.querySelector('.cart-button')
 
-    if(buttonShowCart) {
-        buttonShowCart.addEventListener('click', updateCartList)
-    }
+//     if(buttonShowCart) {
+//         buttonShowCart.addEventListener('click', updateCartList)
+//     }
 
-}
-)
+// }
+// )
 
 
 // ** Nivell II **
@@ -350,12 +366,114 @@ document.addEventListener('DOMContentLoaded', () =>{
 // Exercise 7
 const removeFromCart = (id) => {
 
-    const emptyRow = ''
-    return emptyRow
+  const cartPosition = findPosition(id, cart, 'id')
+  
+
+  if (cartPosition === -1) return;
+
+  const selectedProduct = cart[cartPosition]
+   
+   
+   if (selectedProduct.quantity > 1) {
+    
+        selectedProduct.quantity--
+   }  else if ( selectedProduct.quantity === 1 ){
+
+        cart.splice(cartPosition, 1)
+        
+        }
+     
+    applyPromotionsCart()
+    updateCartList();
+
+    if (cart.length === 0) {
+        cleanCartUI()
+    }
+}
+
+
+
+
+
+const open_modal = () =>  {
+    printCartRow();
 
     
 }
 
-const open_modal = () =>  {
-    printCart();
-}
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const addButtons = document.querySelectorAll('.add-to-cart')
+
+//     addButtons.forEach(button => {
+//         button.addEventListener('click', addItemToCart )
+//     })
+
+//     const cartListContainer = document.getElementById('cart_list')
+
+//     if (cartListContainer) {
+//         cartListContainer.addEventListener('click', (event) => {
+
+//             const targetButton = event.target.closest('.remove-item')
+
+//             if (targetButton) {
+//                 const id = targetButton.getAttribute('data-product-id')
+
+//                 if(id) {
+//                     removeFromCart(id)
+//                 }
+//             }
+//         })
+//     }
+
+//     const buttonCleanCart = document.getElementById('clean-cart')
+
+//     if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart)
+
+
+
+//     const buttonShowCart = document.querySelector('.cart-button')
+
+//     if(buttonShowCart) {
+//         buttonShowCart.addEventListener('click', updateCartList)
+//     }
+
+
+// })
+
+
+// 💡 Código final limpio: Todos los event listeners en un solo lugar.
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // Asignación simple para los botones estáticos (Añadir y Limpiar)
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', addItemToCart);
+    });
+
+    const buttonCleanCart = document.getElementById('clean-cart');
+    if (buttonCleanCart) buttonCleanCart.addEventListener('click', cleanCart);
+
+    const buttonShowCart = document.querySelector('.cart-button');
+    if (buttonShowCart) {
+        // Al mostrar el carrito, aplicamos promociones y lo redibujamos
+        buttonShowCart.addEventListener('click', () => {
+            applyPromotionsCart();
+            updateCartList();
+        });
+    }
+
+    // Delegación de Eventos para botones de eliminar (DINÁMICOS)
+    const cartListContainer = document.getElementById('cart_list');
+    if (cartListContainer) {
+        cartListContainer.addEventListener('click', (event) => {
+            const targetButton = event.target.closest('.remove-item');
+            if (targetButton) {
+                const id = targetButton.getAttribute('data-product-id');
+                if (id) {
+                    removeFromCart(id);
+                }
+            }
+        });
+    }
+});
+
