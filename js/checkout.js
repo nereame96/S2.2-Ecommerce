@@ -1,11 +1,11 @@
 
-// Exercise 6
+
 const validate = (event) => {
 
-	event.preventDefault(); //Para evitar que se envie el formulario si hay errores en los validate
+	event.preventDefault(); 
 
 	let error = 0;
-	// Get the input fields
+	
 	
     const iName = document.getElementById("fName");
     const iEmail = document.getElementById("fEmail");
@@ -22,7 +22,7 @@ const validate = (event) => {
     const fPassword = iPassword.value;
     const fPhone = iPhone.value;
 
-	// Get the error elements
+	
 	const errorName = document.getElementById("errorName");
 	const errorEmail = document.getElementById("errorEmail");  
 	const errorAddress = document.getElementById("errorAddress");  
@@ -31,12 +31,12 @@ const validate = (event) => {
 	const errorPhone = document.getElementById("errorPhone");  
 
 
-	// Regex 
 	
-    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/; // Letters and spaces only
-    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/; // Standard email format
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{4,}$/; // Must contain letters and numbers
-    const phoneRegex = /^\d{9}$/; // Exactly 9 digits
+	
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/; 
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/; 
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{4,}$/; 
+    const phoneRegex = /^\d{9}$/; 
 
 
 
@@ -60,7 +60,8 @@ const validate = (event) => {
 	[iName, iEmail, iAddress, iLastN, iPassword, iPhone].forEach(clearError);
 
 	
-	// Validate fields entered by the user: name, phone, password, and email
+	
+	
 
 	if( !nameRegex.test(fName) || fName.length < 3 || fName === '' ){
 		setError(iName, errorName, 'This field is required and must have, at least, 3 characters');
