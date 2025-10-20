@@ -31,6 +31,13 @@ Open the project folder.
 Open index.html in your web browser.
 
 
+## Live Demo 
+
+You can also view the e-commerce project hosted live here:
+
+https://nereame96.github.io/S2.2-Ecommerce/
+
+
 ## Files & Structure
 
 The core logic is implemented in the following files:
