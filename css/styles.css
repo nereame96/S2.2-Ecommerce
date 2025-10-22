@@ -11286,3 +11286,43 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+
+
+.hero, footer{
+
+    background: linear-gradient(to right, #cd37be, #ef1b79);
+  }
+
+
+
+.btn-outline-dark, .btn-primary {
+  background-color: #df299b;
+  border: none;
+  color: white;
+
+}
+
+.btn-outline-dark:hover, .btn-primary:hover {
+  background-color: #e96dbb;
+}
+
+.btn:focus,
+button:focus {
+  outline: none !important; 
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.product-card:hover {
+  border: 0.5px solid #df299b;
+}
+
+.fas {
+  color: #df299b;
+}
+
+.fa-shopping-cart, .fa-cart-arrow-down {
+  color: white;
+}
+
